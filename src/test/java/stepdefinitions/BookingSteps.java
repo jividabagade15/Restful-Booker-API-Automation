@@ -85,9 +85,17 @@ public class BookingSteps {
 
 	@Then("response contains the booking with an assigned booking ID")
 	public void response_contains_the_booking_with_an_assigned_booking_id() {
-		int newBookingId = response.jsonPath().get("bookingid");
+		id = response.jsonPath().get("bookingid");
 		String firstName = response.jsonPath().getString("booking.firstname");
-		Assert.assertTrue(newBookingId > 0, "A valid booking ID should be assigned");
+		Assert.assertTrue(id > 0, "A valid booking ID should be assigned");
 		Assert.assertEquals(firstName, booking.getFirstname(), "Firstname in response does not match the request");
 	}
+
+	@Then("the booking ID is captured from the response")
+	public void the_booking_id_is_captured_from_the_response() {
+		id = response.jsonPath().get("bookingid");
+		Assert.assertTrue(id > 0, "A valid booking ID should be assigned");
+
+	}
+
 }
