@@ -6,13 +6,11 @@ import java.util.List;
 import org.testng.Assert;
 
 import static io.restassured.RestAssured.*;
-import config.ConfigReader;
 import io.cucumber.java.en.*;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import pojo.Booking;
 import pojo.BookingDates;
+import utils.SpecBuilder;
 import context.TestContext;
 
 public class BookingSteps {
@@ -28,8 +26,8 @@ public class BookingSteps {
 
 	@When("a GET request is sent to the booking endpoint")
 	public void a_get_request_is_sent_to_the_booking_endpoint() throws IOException {
-		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
-		response = given().log().all().when().get("/booking");
+
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
 	}
 
 	@Then("the booking API responds with status code {int}")
@@ -46,8 +44,7 @@ public class BookingSteps {
 
 	@Given("a valid booking ID")
 	public void a_valid_booking_id() throws IOException {
-		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
-		response = given().log().all().when().get("/booking");
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
 		List<Integer> bookingIds = response.jsonPath().getList("bookingid");
 		Assert.assertFalse(bookingIds.isEmpty(), "List for booking Ids should not be empty");
 		id = bookingIds.get(0);
@@ -56,8 +53,8 @@ public class BookingSteps {
 
 	@When("a GET request is sent to the booking endpoint using the booking ID")
 	public void a_get_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
-		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
-		response = given().log().all().pathParam("id", id).when().get("/booking/{id}");
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).when()
+				.get("/booking/{id}");
 
 	}
 
@@ -86,8 +83,7 @@ public class BookingSteps {
 
 	@When("a POST request is sent to the booking endpoint")
 	public void a_post_request_is_sent_to_the_booking_endpoint() throws IOException {
-		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
-		response = given().log().all().contentType(ContentType.JSON).body(booking).when().post("/booking");
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().body(booking).when().post("/booking");
 	}
 
 	@Then("response contains the booking with an assigned booking ID")
@@ -120,10 +116,9 @@ public class BookingSteps {
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
 	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
-		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
 
 		token = context.getToken();
-		response = given().log().all().contentType(ContentType.JSON).pathParam("id", id).cookie("token", token)
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
 				.body(booking).when().put("/booking/{id}");
 	}
 
