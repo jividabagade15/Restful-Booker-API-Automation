@@ -132,4 +132,10 @@ public class BookingSteps {
 				"Additional needs were not updated correctly");
 
 	}
+	@When("a DELETE request is sent to the booking endpoint using the booking ID")
+	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_ID() throws IOException {
+		token= context.getToken();
+		response=given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id",id).cookie("token", token)
+		.when().delete("/booking/{id}");
+	}
 }
