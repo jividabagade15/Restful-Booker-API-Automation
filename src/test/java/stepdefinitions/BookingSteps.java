@@ -13,11 +13,18 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import pojo.Booking;
 import pojo.BookingDates;
+import context.TestContext;
 
 public class BookingSteps {
 	private Response response;
 	private int id;
 	private Booking booking;
+	private TestContext context;
+	private String token;
+
+	public BookingSteps(TestContext context) {
+		this.context = context;
+	}
 
 	@When("a GET request is sent to the booking endpoint")
 	public void a_get_request_is_sent_to_the_booking_endpoint() throws IOException {
@@ -95,7 +102,39 @@ public class BookingSteps {
 	public void the_booking_id_is_captured_from_the_response() {
 		id = response.jsonPath().get("bookingid");
 		Assert.assertTrue(id > 0, "A valid booking ID should be assigned");
-
 	}
 
+	@Then("an updated booking payload is constructed")
+	public void an_updated_booking_payload_is_constructed() {
+		booking = new Booking();
+		booking.setFirstname("John");
+		booking.setLastname("Kate");
+		booking.setTotalprice(589);
+		booking.setDepositpaid(false);
+		BookingDates dates = new BookingDates();
+		dates.setCheckin("2018-02-13");
+		dates.setCheckout("2020-09-01");
+		booking.setBookingdates(dates);
+		booking.setAdditionalneeds("Dinner");
+	}
+
+	@When("a PUT request is sent to the booking endpoint using the booking ID")
+	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
+		RestAssured.baseURI = ConfigReader.getProperty("baseUrl");
+
+		token = context.getToken();
+		response = given().log().all().contentType(ContentType.JSON).pathParam("id", id).cookie("token", token)
+				.body(booking).when().put("/booking/{id}");
+	}
+
+	@Then("the response contains the updated booking details")
+	public void the_response_contains_the_updated_booking_details() {
+		String updatedLastName = response.jsonPath().getString("lastname");
+		String updatedAdditionalNeeds = response.jsonPath().getString("additionalneeds");
+
+		Assert.assertEquals(updatedLastName, booking.getLastname(), "Lastname was not updated correctly");
+		Assert.assertEquals(updatedAdditionalNeeds, booking.getAdditionalneeds(),
+				"Additional needs were not updated correctly");
+
+	}
 }

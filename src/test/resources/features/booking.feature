@@ -25,3 +25,17 @@ Feature: Booking Management
     When a GET request is sent to the booking endpoint using the booking ID
     Then the booking API responds with status code 200
     And the response contains booking details
+
+  Scenario: Update the existing booking data
+    Given a valid booking payload
+    When a POST request is sent to the booking endpoint
+    Then the booking API responds with status code 200
+    And the booking ID is captured from the response
+    Given valid user credentials
+    When a POST request is sent to the authentication endpoint
+    Then API responds with status code 200
+    And the response body includes a valid authentication token
+    And an updated booking payload is constructed
+    When a PUT request is sent to the booking endpoint using the booking ID
+    Then the booking API responds with status code 200
+    And the response contains the updated booking details

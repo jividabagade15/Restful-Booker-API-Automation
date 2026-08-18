@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.testng.Assert;
 
 import config.ConfigReader;
+import context.TestContext;
 import io.cucumber.java.en.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -16,9 +17,17 @@ import io.restassured.specification.RequestSpecification;
 public class AuthenticationSteps {
 	private RequestSpecification request;
 	private Response response;
+	private TestContext context;
 	
-	@Given("the request payload contains valid user credentials")
-	public void the_request_payload_contains_valid_user_credentials() throws IOException {
+	/**
+	 * @param context
+	 */
+	public AuthenticationSteps(TestContext context) {
+		this.context = context;
+	}
+
+	@Given("valid user credentials")
+	public void valid_user_credentials() throws IOException {
 		RestAssured.baseURI=ConfigReader.getProperty("baseUrl");
 		request= given().contentType(ContentType.JSON)
 		.body("{\r\n"
@@ -44,6 +53,7 @@ public class AuthenticationSteps {
 	@Then("the response body includes a valid authentication token")
 	public void the_response_body_includes_a_valid_authentication_token() {
 		String token=response.jsonPath().getString("token");
+		context.setToken(token);
 		Assert.assertFalse(token.isBlank(),"Authentication token should not be null");
 	
 	}
