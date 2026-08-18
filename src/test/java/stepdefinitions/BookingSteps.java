@@ -132,10 +132,35 @@ public class BookingSteps {
 				"Additional needs were not updated correctly");
 
 	}
+
 	@When("a DELETE request is sent to the booking endpoint using the booking ID")
 	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_ID() throws IOException {
-		token= context.getToken();
-		response=given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id",id).cookie("token", token)
-		.when().delete("/booking/{id}");
+		token = context.getToken();
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
+				.when().delete("/booking/{id}");
+	}
+
+	@Given("an invalid booking ID")
+	public void an_invalid_booking_id() {
+		id = 9999999;
+	}
+
+	@Given("an invalid body payload")
+	public void an_invalid_body_payload() {
+		booking = new Booking();
+		booking.setLastname("Kate");
+		booking.setDepositpaid(false);
+		BookingDates dates = new BookingDates();
+		dates.setCheckin("2018-02-13");
+		dates.setCheckout("2020-09-01");
+		booking.setBookingdates(dates);
+		booking.setAdditionalneeds("Dinner");
+	}
+
+	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")
+	public void a_put_request_is_sent_to_the_booking_endpoint_without_authentication_using_the_booking_id()
+			throws IOException {
+		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).body(booking).when()
+				.put("/booking/{id}");
 	}
 }

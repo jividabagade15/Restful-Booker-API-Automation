@@ -51,4 +51,16 @@ public class AuthenticationSteps {
 		Assert.assertFalse(token.isBlank(), "Authentication token should not be null");
 
 	}
+
+	@Given("invalid user credentials")
+	public void invalid_user_credentials() throws IOException {
+		request = given().spec(SpecBuilder.requestBuilder()).log().all().body("{\r\n"
+				+ "    \"username\" : \"admin569\",\r\n" + "    \"password\" : \"passwordkjygtf123\"\r\n" + "}");
+	}
+
+	@Then("the response indicates authentication failure")
+	public void the_response_indicates_authentication_failure() {
+		Assert.assertEquals(response.jsonPath().getString("reason"), "Bad credentials");
+	}
+
 }
