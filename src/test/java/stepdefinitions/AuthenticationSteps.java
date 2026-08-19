@@ -1,9 +1,8 @@
 package stepdefinitions;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static io.restassured.RestAssured.*;
-
 import java.io.IOException;
-
 import org.testng.Assert;
 import context.TestContext;
 import io.cucumber.java.en.*;
@@ -27,11 +26,10 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
-		credentials= new UserCredentials();
+		credentials = new UserCredentials();
 		credentials.setUsername("admin");
 		credentials.setPassword("password123");
-		request = given().spec(SpecBuilder.requestBuilder()).log().all()
-				.body(credentials);
+		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 
 	}
 
@@ -68,6 +66,11 @@ public class AuthenticationSteps {
 	@Then("the response indicates authentication failure")
 	public void the_response_indicates_authentication_failure() {
 		Assert.assertEquals(response.jsonPath().getString("reason"), "Bad credentials");
+	}
+
+	@Then("the response matches the authentication schema")
+	public void the_response_matches_the_authentication_schema() {
+		response.then().assertThat().body(matchesJsonSchemaInClasspath("schemas/AuthenticationResponse.json"));
 	}
 
 }

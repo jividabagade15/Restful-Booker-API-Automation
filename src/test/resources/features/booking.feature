@@ -15,6 +15,7 @@ Feature: Booking Management
     Given a valid booking payload
     When a POST request is sent to the booking endpoint
     Then the booking API responds with status code 200
+    And the response matches the booking schema
     And response contains the booking with an assigned booking ID
 
   Scenario: Create and retrieve a booking using the generated booking ID
@@ -35,7 +36,7 @@ Feature: Booking Management
     When a POST request is sent to the authentication endpoint
     Then API responds with status code 200
     And the response body includes a valid authentication token
-    And an updated booking payload is constructed
+    Given an updated booking payload
     When a PUT request is sent to the booking endpoint using the booking ID
     Then the booking API responds with status code 200
     And the response contains the updated booking details

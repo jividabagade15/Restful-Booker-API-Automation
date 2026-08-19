@@ -10,11 +10,11 @@ Feature: Negative Scenarios
     When a POST request is sent to the authentication endpoint
     Then API responds with status code 200
     And the response indicates authentication failure
-    
+
     Examples:
-		|username  |password 	  |
-		|admin	   |wrongpassword |
-		|wrounguser|passwordwrong |
+      | username   | password      |
+      | admin      | wrongpassword |
+      | wrounguser | passwordwrong |
 
   Scenario: Create booking with invalid request body
     Given an invalid body payload
@@ -26,6 +26,6 @@ Feature: Negative Scenarios
     When a POST request is sent to the booking endpoint
     Then the booking API responds with status code 200
     And the booking ID is captured from the response
-    And an updated booking payload is constructed
+    Given an updated booking payload
     When a PUT request is sent to the booking endpoint without authentication using the booking ID
     Then the booking API responds with status code 403

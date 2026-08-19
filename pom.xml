@@ -48,5 +48,12 @@
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>7.34.6</version>
 		</dependency>
+		<!-- Source:
+		https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>6.0.1</version>
+		</dependency>
 	</dependencies>
 </project>

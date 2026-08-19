@@ -2,7 +2,7 @@ package stepdefinitions;
 
 import java.io.IOException;
 import java.util.List;
-
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import org.testng.Assert;
 
 import static io.restassured.RestAssured.*;
@@ -18,7 +18,6 @@ public class BookingSteps {
 	private int id;
 	private Booking booking;
 	private TestContext context;
-	private String token;
 
 	public BookingSteps(TestContext context) {
 		this.context = context;
@@ -100,8 +99,8 @@ public class BookingSteps {
 		Assert.assertTrue(id > 0, "A valid booking ID should be assigned");
 	}
 
-	@Then("an updated booking payload is constructed")
-	public void an_updated_booking_payload_is_constructed() {
+	@Given("an updated booking payload")
+	public void an_updated_booking_payload() {
 		booking = new Booking();
 		booking.setFirstname("John");
 		booking.setLastname("Kate");
@@ -117,7 +116,7 @@ public class BookingSteps {
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
 	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
 
-		token = context.getToken();
+		String token = context.getToken();
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
 				.body(booking).when().put("/booking/{id}");
 	}
@@ -134,8 +133,8 @@ public class BookingSteps {
 	}
 
 	@When("a DELETE request is sent to the booking endpoint using the booking ID")
-	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_ID() throws IOException {
-		token = context.getToken();
+	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
+		String token = context.getToken();
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
 				.when().delete("/booking/{id}");
 	}
@@ -162,5 +161,10 @@ public class BookingSteps {
 			throws IOException {
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).body(booking).when()
 				.put("/booking/{id}");
+	}
+
+	@Then("the response matches the booking schema")
+	public void the_response_matches_the_booking_schema() {
+		response.then().assertThat().body(matchesJsonSchemaInClasspath("schemas/bookingResponse.json"));
 	}
 }
