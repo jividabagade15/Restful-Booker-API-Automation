@@ -9,12 +9,14 @@ import context.TestContext;
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import pojo.UserCredentials;
 import utils.SpecBuilder;
 
 public class AuthenticationSteps {
 	private RequestSpecification request;
 	private Response response;
 	private TestContext context;
+	private UserCredentials credentials;
 
 	/**
 	 * @param context
@@ -25,8 +27,11 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
+		credentials= new UserCredentials();
+		credentials.setUsername("admin");
+		credentials.setPassword("password123");
 		request = given().spec(SpecBuilder.requestBuilder()).log().all()
-				.body("{\r\n" + "    \"username\" : \"admin\",\r\n" + "    \"password\" : \"password123\"\r\n" + "}");
+				.body(credentials);
 
 	}
 
@@ -52,10 +57,12 @@ public class AuthenticationSteps {
 
 	}
 
-	@Given("invalid user credentials")
-	public void invalid_user_credentials() throws IOException {
-		request = given().spec(SpecBuilder.requestBuilder()).log().all().body("{\r\n"
-				+ "    \"username\" : \"admin569\",\r\n" + "    \"password\" : \"passwordkjygtf123\"\r\n" + "}");
+	@Given("request payload contains {string} and {string}")
+	public void request_payload_contains_and(String username, String password) throws IOException {
+		credentials = new UserCredentials();
+		credentials.setUsername(username);
+		credentials.setPassword(password);
+		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 	}
 
 	@Then("the response indicates authentication failure")
