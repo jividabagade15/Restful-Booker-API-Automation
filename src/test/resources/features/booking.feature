@@ -1,16 +1,19 @@
 Feature: Booking Management
 
+  @Regression @Smoke
   Scenario: Get all booking IDs
     When a GET request is sent to the booking endpoint
     Then the booking API responds with status code 200
     And the response contains booking IDs
 
+  @Regression @Smoke
   Scenario: Get booking by ID
     Given a valid booking ID
     When a GET request is sent to the booking endpoint using the booking ID
     Then the booking API responds with status code 200
     And the response contains booking details
 
+  @Regression @Smoke
   Scenario: Create a booking
     Given a valid booking payload
     When a POST request is sent to the booking endpoint
@@ -18,6 +21,7 @@ Feature: Booking Management
     And the response matches the booking schema
     And response contains the booking with an assigned booking ID
 
+  @Regression
   Scenario: Create and retrieve a booking using the generated booking ID
     Given a valid booking payload
     When a POST request is sent to the booking endpoint
@@ -27,6 +31,7 @@ Feature: Booking Management
     Then the booking API responds with status code 200
     And the response contains booking details
 
+  @Regression @Smoke
   Scenario: Update the existing booking data
     Given a valid booking payload
     When a POST request is sent to the booking endpoint
@@ -41,6 +46,7 @@ Feature: Booking Management
     Then the booking API responds with status code 200
     And the response contains the updated booking details
 
+  @Regression @Smoke
   Scenario: Delete the existing booking data
     Given a valid booking payload
     When a POST request is sent to the booking endpoint

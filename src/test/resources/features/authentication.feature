@@ -1,5 +1,6 @@
 Feature: Authentication Token
 
+  @Regression @Smoke
   Scenario: Create authentication token with valid credentials
     Given valid user credentials
     When a POST request is sent to the authentication endpoint
