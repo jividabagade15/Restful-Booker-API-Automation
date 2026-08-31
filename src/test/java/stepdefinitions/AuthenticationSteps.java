@@ -9,6 +9,7 @@ import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import pojo.UserCredentials;
+import utils.JsonDataReader;
 import utils.SpecBuilder;
 
 public class AuthenticationSteps {
@@ -26,9 +27,7 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
-		credentials = new UserCredentials();
-		credentials.setUsername("admin");
-		credentials.setPassword("password123");
+		credentials = JsonDataReader.readJson("src\\test\\resources\\testdata\\authenticationData.json",UserCredentials.class);
 		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 
 	}

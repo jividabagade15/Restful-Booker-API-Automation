@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.*;
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import pojo.Booking;
-import pojo.BookingDates;
+import utils.JsonDataReader;
 import utils.SpecBuilder;
 import context.TestContext;
 
@@ -67,17 +67,8 @@ public class BookingSteps {
 	}
 
 	@Given("a valid booking payload")
-	public void a_valid_booking_payload() {
-		booking = new Booking();
-		booking.setFirstname("John");
-		booking.setLastname("Cavill");
-		booking.setTotalprice(589);
-		booking.setDepositpaid(false);
-		BookingDates dates = new BookingDates();
-		dates.setCheckin("2018-02-13");
-		dates.setCheckout("2019-02-13");
-		booking.setBookingdates(dates);
-		booking.setAdditionalneeds("Lunch");
+	public void a_valid_booking_payload() throws IOException {
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\bookingData.json",Booking.class);
 	}
 
 	@When("a POST request is sent to the booking endpoint")
@@ -100,17 +91,8 @@ public class BookingSteps {
 	}
 
 	@Given("an updated booking payload")
-	public void an_updated_booking_payload() {
-		booking = new Booking();
-		booking.setFirstname("John");
-		booking.setLastname("Kate");
-		booking.setTotalprice(589);
-		booking.setDepositpaid(false);
-		BookingDates dates = new BookingDates();
-		dates.setCheckin("2018-02-13");
-		dates.setCheckout("2020-09-01");
-		booking.setBookingdates(dates);
-		booking.setAdditionalneeds("Dinner");
+	public void an_updated_booking_payload() throws IOException {
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\updatedBookingData.json",Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
@@ -145,15 +127,8 @@ public class BookingSteps {
 	}
 
 	@Given("an invalid body payload")
-	public void an_invalid_body_payload() {
-		booking = new Booking();
-		booking.setLastname("Kate");
-		booking.setDepositpaid(false);
-		BookingDates dates = new BookingDates();
-		dates.setCheckin("2018-02-13");
-		dates.setCheckout("2020-09-01");
-		booking.setBookingdates(dates);
-		booking.setAdditionalneeds("Dinner");
+	public void an_invalid_body_payload() throws IOException {
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\invalidBookingData.json",Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")
