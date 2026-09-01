@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import pojo.UserCredentials;
 import utils.JsonDataReader;
+import utils.ResponseValidator;
 import utils.SpecBuilder;
 
 public class AuthenticationSteps {
@@ -27,7 +28,8 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
-		credentials = JsonDataReader.readJson("src\\test\\resources\\testdata\\authenticationData.json",UserCredentials.class);
+		credentials = JsonDataReader.readJson("src\\test\\resources\\testdata\\authenticationData.json",
+				UserCredentials.class);
 		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 
 	}
@@ -40,9 +42,8 @@ public class AuthenticationSteps {
 
 	@Then("API responds with status code {int}")
 	public void api_responds_with_status_code(Integer expectedStatusCode) {
-		response = response.then().log().all().extract().response();
-		Assert.assertEquals(response.getStatusCode(), expectedStatusCode,
-				"Expected status code 200 for successful authentication");
+		response.then().log().all();
+		ResponseValidator.validateStatusCode(response, expectedStatusCode);
 
 	}
 
@@ -64,7 +65,8 @@ public class AuthenticationSteps {
 
 	@Then("the response indicates authentication failure")
 	public void the_response_indicates_authentication_failure() {
-		Assert.assertEquals(response.jsonPath().getString("reason"), "Bad credentials");
+		ResponseValidator.validateFieldValue(response, "reason", "Bad credentials");
+
 	}
 
 	@Then("the response matches the authentication schema")

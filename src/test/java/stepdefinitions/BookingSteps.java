@@ -10,6 +10,7 @@ import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import pojo.Booking;
 import utils.JsonDataReader;
+import utils.ResponseValidator;
 import utils.SpecBuilder;
 import context.TestContext;
 
@@ -32,7 +33,7 @@ public class BookingSteps {
 	@Then("the booking API responds with status code {int}")
 	public void the_booking_api_responds_with_status_code(Integer expectedStatusCode) {
 		response.then().log().all();
-		Assert.assertEquals(response.getStatusCode(), expectedStatusCode, "Unexpected status code for booking request");
+		ResponseValidator.validateStatusCode(response, expectedStatusCode);
 	}
 
 	@Then("the response contains booking IDs")
@@ -59,16 +60,15 @@ public class BookingSteps {
 
 	@Then("the response contains booking details")
 	public void the_response_contains_booking_details() {
-		String firstName = response.jsonPath().getString("firstname");
-		String totalPrice = response.jsonPath().getString("totalprice");
-		Assert.assertNotNull(firstName, "First name should be present in booking response");
-		Assert.assertNotNull(totalPrice, "The total price should be present in booking response");
+
+		ResponseValidator.validateFieldNotNull(response, "firstname");
+		ResponseValidator.validateFieldNotNull(response, "totalprice");
 
 	}
 
 	@Given("a valid booking payload")
 	public void a_valid_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\bookingData.json",Booking.class);
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\bookingData.json", Booking.class);
 	}
 
 	@When("a POST request is sent to the booking endpoint")
@@ -79,9 +79,8 @@ public class BookingSteps {
 	@Then("response contains the booking with an assigned booking ID")
 	public void response_contains_the_booking_with_an_assigned_booking_id() {
 		id = response.jsonPath().get("bookingid");
-		String firstName = response.jsonPath().getString("booking.firstname");
 		Assert.assertTrue(id > 0, "A valid booking ID should be assigned");
-		Assert.assertEquals(firstName, booking.getFirstname(), "Firstname in response does not match the request");
+		ResponseValidator.validateFieldValue(response, "booking.firstname", booking.getFirstname());
 	}
 
 	@Then("the booking ID is captured from the response")
@@ -92,7 +91,7 @@ public class BookingSteps {
 
 	@Given("an updated booking payload")
 	public void an_updated_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\updatedBookingData.json",Booking.class);
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\updatedBookingData.json", Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
@@ -105,12 +104,9 @@ public class BookingSteps {
 
 	@Then("the response contains the updated booking details")
 	public void the_response_contains_the_updated_booking_details() {
-		String updatedLastName = response.jsonPath().getString("lastname");
-		String updatedAdditionalNeeds = response.jsonPath().getString("additionalneeds");
 
-		Assert.assertEquals(updatedLastName, booking.getLastname(), "Lastname was not updated correctly");
-		Assert.assertEquals(updatedAdditionalNeeds, booking.getAdditionalneeds(),
-				"Additional needs were not updated correctly");
+		ResponseValidator.validateFieldValue(response, "lastname", booking.getLastname());
+		ResponseValidator.validateFieldValue(response, "additionalneeds", booking.getAdditionalneeds());
 
 	}
 
@@ -128,7 +124,7 @@ public class BookingSteps {
 
 	@Given("an invalid body payload")
 	public void an_invalid_body_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\invalidBookingData.json",Booking.class);
+		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\invalidBookingData.json", Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")
