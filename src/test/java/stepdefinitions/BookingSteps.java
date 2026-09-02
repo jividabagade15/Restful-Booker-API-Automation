@@ -12,6 +12,7 @@ import pojo.Booking;
 import utils.JsonDataReader;
 import utils.ResponseValidator;
 import utils.SpecBuilder;
+import utils.TestDataPaths;
 import context.TestContext;
 
 public class BookingSteps {
@@ -68,7 +69,7 @@ public class BookingSteps {
 
 	@Given("a valid booking payload")
 	public void a_valid_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("testdata/bookingData.json", Booking.class);
+		booking = JsonDataReader.readJson(TestDataPaths.BOOKING_DATA, Booking.class);
 	}
 
 	@When("a POST request is sent to the booking endpoint")
@@ -91,7 +92,7 @@ public class BookingSteps {
 
 	@Given("an updated booking payload")
 	public void an_updated_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("testdata/updatedBookingData.json", Booking.class);
+		booking = JsonDataReader.readJson(TestDataPaths.UPDATED_BOOKING_DATA, Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
@@ -124,7 +125,7 @@ public class BookingSteps {
 
 	@Given("an invalid body payload")
 	public void an_invalid_body_payload() throws IOException {
-		booking = JsonDataReader.readJson("testdata/invalidBookingData.json", Booking.class);
+		booking = JsonDataReader.readJson(TestDataPaths.INVALID_BOOKING_DATA, Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")

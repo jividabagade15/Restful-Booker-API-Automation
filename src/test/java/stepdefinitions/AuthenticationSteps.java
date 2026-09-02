@@ -12,6 +12,7 @@ import pojo.UserCredentials;
 import utils.JsonDataReader;
 import utils.ResponseValidator;
 import utils.SpecBuilder;
+import utils.TestDataPaths;
 
 public class AuthenticationSteps {
 	private RequestSpecification request;
@@ -28,8 +29,7 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
-		credentials = JsonDataReader.readJson("testdata/authenticationData.json",
-				UserCredentials.class);
+		credentials = JsonDataReader.readJson(TestDataPaths.AUTHENTICATION_DATA, UserCredentials.class);
 		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 
 	}
