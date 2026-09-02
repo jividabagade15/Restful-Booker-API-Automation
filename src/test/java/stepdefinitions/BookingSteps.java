@@ -68,7 +68,7 @@ public class BookingSteps {
 
 	@Given("a valid booking payload")
 	public void a_valid_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\bookingData.json", Booking.class);
+		booking = JsonDataReader.readJson("testdata/bookingData.json", Booking.class);
 	}
 
 	@When("a POST request is sent to the booking endpoint")
@@ -91,7 +91,7 @@ public class BookingSteps {
 
 	@Given("an updated booking payload")
 	public void an_updated_booking_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\updatedBookingData.json", Booking.class);
+		booking = JsonDataReader.readJson("testdata/updatedBookingData.json", Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
@@ -124,7 +124,7 @@ public class BookingSteps {
 
 	@Given("an invalid body payload")
 	public void an_invalid_body_payload() throws IOException {
-		booking = JsonDataReader.readJson("src\\test\\resources\\testdata\\invalidBookingData.json", Booking.class);
+		booking = JsonDataReader.readJson("testdata/invalidBookingData.json", Booking.class);
 	}
 
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")

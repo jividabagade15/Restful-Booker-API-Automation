@@ -28,7 +28,7 @@ public class AuthenticationSteps {
 
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
-		credentials = JsonDataReader.readJson("src\\test\\resources\\testdata\\authenticationData.json",
+		credentials = JsonDataReader.readJson("testdata/authenticationData.json",
 				UserCredentials.class);
 		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
 
