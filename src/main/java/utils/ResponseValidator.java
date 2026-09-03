@@ -22,5 +22,10 @@ public class ResponseValidator {
 		Assert.assertEquals(actualValue, expectedValue, fieldName + " in response does not match the request");
 
 	}
+	
+	public static void validateFieldNotBlank(Response response, String field) {
+		String token = response.jsonPath().getString(field);
+		Assert.assertFalse(token==null|| token.isBlank(),"Authentication token should not be null");
+	}
 
 }

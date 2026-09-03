@@ -26,7 +26,7 @@ public class BookingSteps {
 	}
 
 	@When("a GET request is sent to the booking endpoint")
-	public void a_get_request_is_sent_to_the_booking_endpoint() throws IOException {
+	public void a_get_request_is_sent_to_the_booking_endpoint() {
 
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
 		response.then().log().all();
@@ -44,7 +44,7 @@ public class BookingSteps {
 	}
 
 	@Given("a valid booking ID")
-	public void a_valid_booking_id() throws IOException {
+	public void a_valid_booking_id() {
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
 		response.then().log().all();
 		List<Integer> bookingIds = response.jsonPath().getList("bookingid");
@@ -54,7 +54,7 @@ public class BookingSteps {
 	}
 
 	@When("a GET request is sent to the booking endpoint using the booking ID")
-	public void a_get_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
+	public void a_get_request_is_sent_to_the_booking_endpoint_using_the_booking_id() {
 		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).log().all().when()
 				.get("/booking/{id}");
 		response.then().log().all();
@@ -75,7 +75,7 @@ public class BookingSteps {
 	}
 
 	@When("a POST request is sent to the booking endpoint")
-	public void a_post_request_is_sent_to_the_booking_endpoint() throws IOException {
+	public void a_post_request_is_sent_to_the_booking_endpoint() {
 		response = given().spec(SpecBuilder.requestBuilder()).body(booking).log().all().when().post("/booking");
 		response.then().log().all();
 	}
@@ -99,7 +99,7 @@ public class BookingSteps {
 	}
 
 	@When("a PUT request is sent to the booking endpoint using the booking ID")
-	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
+	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() {
 
 		String token = context.getToken();
 		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).cookie("token", token).body(booking)
@@ -116,7 +116,7 @@ public class BookingSteps {
 	}
 
 	@When("a DELETE request is sent to the booking endpoint using the booking ID")
-	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
+	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_id() {
 		String token = context.getToken();
 		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).cookie("token", token).log().all()
 				.when().delete("/booking/{id}");
@@ -134,8 +134,7 @@ public class BookingSteps {
 	}
 
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")
-	public void a_put_request_is_sent_to_the_booking_endpoint_without_authentication_using_the_booking_id()
-			throws IOException {
+	public void a_put_request_is_sent_to_the_booking_endpoint_without_authentication_using_the_booking_id() {
 		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).body(booking).log().all().when()
 				.put("/booking/{id}");
 		response.then().log().all();

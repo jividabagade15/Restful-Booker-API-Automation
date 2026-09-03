@@ -7,7 +7,7 @@ import java.util.Properties;
 public class ConfigReader {
 	static Properties prop=new Properties();
 	
-	public static String getProperty(String property) throws IOException {
+	public static String getProperty(String property) {
 		try(InputStream inputStream= ConfigReader.class.getClassLoader().getResourceAsStream("config.properties")){
 			if(inputStream==null) {
 				throw new RuntimeException("File not found");
