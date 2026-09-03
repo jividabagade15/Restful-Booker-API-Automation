@@ -29,11 +29,11 @@ public class BookingSteps {
 	public void a_get_request_is_sent_to_the_booking_endpoint() throws IOException {
 
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
+		response.then().log().all();
 	}
 
 	@Then("the booking API responds with status code {int}")
 	public void the_booking_api_responds_with_status_code(Integer expectedStatusCode) {
-		response.then().log().all();
 		ResponseValidator.validateStatusCode(response, expectedStatusCode);
 	}
 
@@ -46,6 +46,7 @@ public class BookingSteps {
 	@Given("a valid booking ID")
 	public void a_valid_booking_id() throws IOException {
 		response = given().spec(SpecBuilder.requestBuilder()).log().all().when().get("/booking");
+		response.then().log().all();
 		List<Integer> bookingIds = response.jsonPath().getList("bookingid");
 		Assert.assertFalse(bookingIds.isEmpty(), "List for booking Ids should not be empty");
 		id = bookingIds.get(0);
@@ -54,8 +55,9 @@ public class BookingSteps {
 
 	@When("a GET request is sent to the booking endpoint using the booking ID")
 	public void a_get_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
-		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).when()
+		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).log().all().when()
 				.get("/booking/{id}");
+		response.then().log().all();
 
 	}
 
@@ -74,7 +76,8 @@ public class BookingSteps {
 
 	@When("a POST request is sent to the booking endpoint")
 	public void a_post_request_is_sent_to_the_booking_endpoint() throws IOException {
-		response = given().spec(SpecBuilder.requestBuilder()).log().all().body(booking).when().post("/booking");
+		response = given().spec(SpecBuilder.requestBuilder()).body(booking).log().all().when().post("/booking");
+		response.then().log().all();
 	}
 
 	@Then("response contains the booking with an assigned booking ID")
@@ -99,8 +102,9 @@ public class BookingSteps {
 	public void a_put_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
 
 		String token = context.getToken();
-		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
-				.body(booking).when().put("/booking/{id}");
+		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).cookie("token", token).body(booking)
+				.log().all().when().put("/booking/{id}");
+		response.then().log().all();
 	}
 
 	@Then("the response contains the updated booking details")
@@ -114,8 +118,9 @@ public class BookingSteps {
 	@When("a DELETE request is sent to the booking endpoint using the booking ID")
 	public void a_delete_request_is_sent_to_the_booking_endpoint_using_the_booking_id() throws IOException {
 		String token = context.getToken();
-		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).cookie("token", token)
+		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).cookie("token", token).log().all()
 				.when().delete("/booking/{id}");
+		response.then().log().all();
 	}
 
 	@Given("an invalid booking ID")
@@ -131,8 +136,9 @@ public class BookingSteps {
 	@When("a PUT request is sent to the booking endpoint without authentication using the booking ID")
 	public void a_put_request_is_sent_to_the_booking_endpoint_without_authentication_using_the_booking_id()
 			throws IOException {
-		response = given().spec(SpecBuilder.requestBuilder()).log().all().pathParam("id", id).body(booking).when()
+		response = given().spec(SpecBuilder.requestBuilder()).pathParam("id", id).body(booking).log().all().when()
 				.put("/booking/{id}");
+		response.then().log().all();
 	}
 
 	@Then("the response matches the booking schema")

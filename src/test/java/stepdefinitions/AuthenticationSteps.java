@@ -30,19 +30,20 @@ public class AuthenticationSteps {
 	@Given("valid user credentials")
 	public void valid_user_credentials() throws IOException {
 		credentials = JsonDataReader.readJson(TestDataPaths.AUTHENTICATION_DATA, UserCredentials.class);
-		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
+		request = given().spec(SpecBuilder.requestBuilder()).body(credentials);
 
 	}
 
 	@When("a POST request is sent to the authentication endpoint")
 	public void a_post_request_is_sent_to_the_authentication_endpoint() {
 		response = request.when().post("/auth");
+		response.then().log().status();
 
 	}
 
 	@Then("API responds with status code {int}")
 	public void api_responds_with_status_code(Integer expectedStatusCode) {
-		response.then().log().all();
+
 		ResponseValidator.validateStatusCode(response, expectedStatusCode);
 
 	}
@@ -60,7 +61,7 @@ public class AuthenticationSteps {
 		credentials = new UserCredentials();
 		credentials.setUsername(username);
 		credentials.setPassword(password);
-		request = given().spec(SpecBuilder.requestBuilder()).log().all().body(credentials);
+		request = given().spec(SpecBuilder.requestBuilder()).body(credentials);
 	}
 
 	@Then("the response indicates authentication failure")
