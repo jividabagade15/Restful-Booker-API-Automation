@@ -10,10 +10,11 @@ import com.aventstack.extentreports.ExtentTest;
 import io.cucumber.testng.PickleWrapper;
 import utils.ExtentReportNG;
 
-public class TestNGListener implements ITestListener{
+public class TestNGListener implements ITestListener {
 
-	ExtentReports extent= ExtentReportNG.getReportObject();
-	private static ThreadLocal<ExtentTest> test= new ThreadLocal<ExtentTest>();
+	ExtentReports extent = ExtentReportNG.getReportObject();
+	private static ThreadLocal<ExtentTest> test = new ThreadLocal<ExtentTest>();
+
 	@Override
 	public void onFinish(ITestContext context) {
 		extent.flush();
@@ -49,11 +50,11 @@ public class TestNGListener implements ITestListener{
 
 	@Override
 	public void onTestStart(ITestResult result) {
-		PickleWrapper wrapper=(PickleWrapper) result.getParameters()[0];
-		String scenarioName= wrapper.getPickle().getName();
-		ExtentTest extentTest= extent.createTest(scenarioName);
+		PickleWrapper wrapper = (PickleWrapper) result.getParameters()[0];
+		String scenarioName = wrapper.getPickle().getName();
+		ExtentTest extentTest = extent.createTest(scenarioName);
 //		ExtentTest extentTest= extent.createTest(result.getMethod().getMethodName());
-		
+
 		test.set(extentTest);
 	}
 

@@ -50,7 +50,7 @@ public class AuthenticationSteps {
 	@Then("the response body includes a valid authentication token")
 	public void the_response_body_includes_a_valid_authentication_token() {
 		ResponseValidator.validateFieldNotBlank(response, "token");
-		
+
 		String token = response.jsonPath().getString("token");
 		context.setToken(token);
 
